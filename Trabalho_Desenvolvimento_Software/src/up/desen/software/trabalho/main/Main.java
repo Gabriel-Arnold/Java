@@ -24,60 +24,16 @@ public class Main {
 			System.out.println("0 - Sair do programa.");
 			System.out.println("===============================");
 			
-			
-			System.out.println("\nSelecione a opção desejada:");
-			System.out.println("\n==========[ CLIENTE ]==========");
-			System.out.println("1 - Fazer login/cadastro.");
-			System.out.println("2 - Fazer pedido.");
-			System.out.println("3 - Vizualizar status do pedido.");
-			System.out.println("===============================");
-			System.out.println("\n==========[ ADMINISTRADOR ]==========");
-			System.out.println("4 - Cadastrar novo Estabelecimento.");
-			System.out.println("5 - Excluir Estabelecimento.");
-			System.out.println("6 - Gerenciar Estabelecimento.");
-			System.out.println("7 - Listar Estabelecimentos.");
-			System.out.println("8 - Listar Pedidos.");
-			System.out.println("9 - Listar Usuarios.");
-			System.out.println("10 - Concluir Entrega.");
-			System.out.println("===============================");
-			System.out.println("0 - Sair do programa.");
-			
 			System.out.println("\nDigite a opção que deseja: ");
 			select = sc.nextInt();
 			
 			switch (select) {
 			case 1: {
-				
+				Usuario user = Login_Cadastro_Usuario(sc);
+				if(user != null) Painel_User(sc, user);
 			}
 			case 2: {
-				
-			}
-			case 3: {
-				
-			}
-			case 4: {
-				cadastrasEstabelecimento(sc);
-				continue;
-			}
-			case 5: {
-				excluirEstabelecimento(sc);
-			}
-			case 6: {
-				gerenciarEstabelecimento(sc);
-				continue;
-			}
-			case 7: {
-				listarEstabelecimentos();
-				continue;
-			}
-			case 8: {
-				
-			}
-			case 9: {
-				
-			}
-			case 19: {
-				
+				Painel_Admin(sc);
 			}
 			case 0: {
 				System.out.println("\nObrigado pela preferência.");
@@ -90,13 +46,88 @@ public class Main {
 		sc.close();
 	}
 	
-	private static void Login_Cadastro_Usuario(Scanner sc) {
+	private static void Painel_User(Scanner sc, Usuario user) {
 		int select = -1;
 		do {
-			System.out.println("==================");
+			System.out.println("\n==========[ CLIENTE ]==========");
+			System.out.println("1 - Fazer pedido.");
+			System.out.println("2 - Vizualizar status do pedido.");
+			System.out.println("0 - Voltar");
+			System.out.println("===============================");
+			System.out.println("\nSelecione a opção desejada:");
+			
+			select = sc.nextInt();
+			
+			switch (select) {
+			case 1: {
+				
+			}
+			case 2: {
+				
+			}
+			case 0: {
+			}
+			default:
+				System.out.println("\nOpção selecionada invalida.");;
+			}
+		}while(select != 0);
+	}
+	
+	private static void Painel_Admin(Scanner sc) {
+		int select = -1;
+		do {
+			System.out.println("\n==========[ ADMINISTRADOR ]==========");
+			System.out.println("1 - Cadastrar novo Estabelecimento.");
+			System.out.println("2 - Excluir Estabelecimento.");
+			System.out.println("3 - Gerenciar Estabelecimento.");
+			System.out.println("4 - Listar Estabelecimentos.");
+			System.out.println("5 - Listar Pedidos.");
+			System.out.println("6 - Listar Usuarios.");
+			System.out.println("7 - Concluir Entrega.");
+			System.out.println("0 - Voltar.");
+			System.out.println("===============================");
+			System.out.println("\nSelecione a opção desejada:");
+			
+			select = sc.nextInt();
+			
+			switch (select) {
+			case 1: {
+				cadastrasEstabelecimento(sc);
+			}
+			case 2: {
+				excluirEstabelecimento(sc);
+			}
+			case 3: {
+				gerenciarEstabelecimento(sc);
+			}
+			case 4: {
+				listarEstabelecimentos();
+			}
+			case 5: {
+				
+			}
+			case 6: {
+				
+			}
+			case 7: {
+				
+			}
+			case 0: {
+			}
+			default:
+				System.out.println("\nOpção selecionada invalida.");;
+			}
+		}while(select != 0);
+	}
+	
+	private static Usuario Login_Cadastro_Usuario(Scanner sc) {
+		int select = -1;
+		do {
+			System.out.println("===============================");
 			System.out.println("1 - Logar em um usuario");
 			System.out.println("2 - Registrar um novo usuario");
 			System.out.println("0 - Para voltar.");
+			System.out.println("===============================");
 			System.out.println("Digite a opção desejada:");
 			select = sc.nextInt();
 			if(select > 0 && select < 3) {
@@ -120,29 +151,60 @@ public class Main {
 				}
 				System.out.println("Esse usuario não existe.");
 			}while(!usuario.equalsIgnoreCase("sair"));
-			if(usuario.equalsIgnoreCase("sair")) return;
+			if(usuario.equalsIgnoreCase("sair")) return null;
 			if(user != null) {
 				String senha;
 				do {
 					System.out.println("Digite a senha: ");
 					senha = sc.next();
 					if(user.getSenha() == senha) {
-						break;
-						
-						// Continuar
-						
+						return user;
 					}
 					System.out.println("Senha incorreta.");
 				}while(!senha.equalsIgnoreCase("sair"));
 			} else {
 				System.out.println("ERRO: 1");
-				return;
+				return null;
 			}
 		} else if(select == 2) {
-			
+			String usuario = null;
+			do {
+				System.out.println("Digite um nome de usuario: ");
+				usuario = sc.next();
+				for(Usuario user : usuarios) {
+					if(user.getUsuario() != usuario) {
+						continue;
+					} else {
+						System.out.println("Esse usuário já existe.");
+						break;
+					}
+				}
+			}while(!usuario.equalsIgnoreCase("sair"));
+			if(usuario != null && !usuario.equalsIgnoreCase("sair")) {
+				System.out.println("Digite o seu nome completo: ");
+				String nome = sc.next();
+				System.out.println("Digite o seu endereço: ");
+				String endereco = sc.next();
+				System.out.println("Digite uma senha: ");
+				String senha = sc.next();
+				int id = 0;
+				
+				for(Usuario user : usuarios) {
+					if(id <= user.getID()) id = user.getID();
+				}
+				
+				id++;
+				Usuario user = new Usuario(id, usuario, senha, nome, endereco);
+				usuarios.add(user);
+				System.out.println("Usuario criado.");
+				return null;
+			}
+			return null;
 		} else {
 			System.out.println("ERRO: 1");
+			return null;
 		}
+		return null;
 	}
 	
 	private static void cadastrasEstabelecimento(Scanner sc) {
