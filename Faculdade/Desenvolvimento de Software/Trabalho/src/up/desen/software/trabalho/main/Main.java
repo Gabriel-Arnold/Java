@@ -31,9 +31,11 @@ public class Main {
 			case 1: {
 				Usuario user = Login_Cadastro_Usuario(sc);
 				if(user != null) Painel_User(sc, user);
+				continue;
 			}
 			case 2: {
 				Painel_Admin(sc);
+				continue;
 			}
 			case 0: {
 				System.out.println("\nObrigado pela preferência.");
@@ -124,13 +126,14 @@ public class Main {
 		int select = -1;
 		do {
 			System.out.println("===============================");
-			System.out.println("1 - Logar em um usuario");
-			System.out.println("2 - Registrar um novo usuario");
+			System.out.println("1 - Logar em um usuario.");
+			System.out.println("2 - Registrar um novo usuario.");
+			System.out.println("3 - Listar usuarios.");
 			System.out.println("0 - Para voltar.");
 			System.out.println("===============================");
 			System.out.println("Digite a opção desejada:");
 			select = sc.nextInt();
-			if(select > 0 && select < 3) {
+			if(select > 0 && select <= 3) {
 				break;
 			} else {
 				System.out.println("\nOpção selecionada invalida.");
@@ -142,9 +145,9 @@ public class Main {
 			do {
 				System.out.println("Digite o usuario ou digite sair para voltar:");
 				usuario = sc.next();
-				
 				for(Usuario u : usuarios) {
-					if(u.getUsuario() == usuario) {
+					u.Verificar(usuario);
+					if(usuario == u.getUsuario()) {
 						user = u;
 						break;
 					}
@@ -179,27 +182,61 @@ public class Main {
 						break;
 					}
 				}
+				break;
 			}while(!usuario.equalsIgnoreCase("sair"));
 			if(usuario != null && !usuario.equalsIgnoreCase("sair")) {
 				System.out.println("Digite o seu nome completo: ");
-				String nome = sc.next();
-				System.out.println("Digite o seu endereço: ");
-				String endereco = sc.next();
-				System.out.println("Digite uma senha: ");
-				String senha = sc.next();
-				int id = 0;
-				
-				for(Usuario user : usuarios) {
-					if(id <= user.getID()) id = user.getID();
+				String nome = null;
+				nome = sc.next();
+				if(nome != null) {
+					
+					System.out.println(nome);
+					
+					System.out.println("Digite o seu endereço: ");
+					String endereco = null;
+					endereco = sc.next();
+					if(endereco != null) {
+						
+						System.out.println(endereco);
+						
+						System.out.println("Digite uma senha: ");
+						String senha = null;
+						senha =sc.next();
+						if(senha != null) {
+							
+							System.out.println(senha);
+							
+							int id = 0;
+							
+							for(Usuario user : usuarios) {
+								if(id <= user.getID()) id = user.getID();
+							}
+							
+							id++;
+							Usuario user = new Usuario(id, usuario, senha, nome, endereco);
+							usuarios.add(user);
+							System.out.println("Usuario criado.");
+							return null;
+						} else {
+							System.out.println("ERRO: 3");
+							return null;
+						}
+					} else {
+						System.out.println("ERRO: 2");
+						return null;
+					}
+				} else {
+					System.out.println("ERRO: 1");
+					return null;
 				}
-				
-				id++;
-				Usuario user = new Usuario(id, usuario, senha, nome, endereco);
-				usuarios.add(user);
-				System.out.println("Usuario criado.");
-				return null;
 			}
 			return null;
+		} else if(select == 3) {
+			System.out.println("Usuarios cadastrados: ");
+			System.out.println("ID - Usuario");
+			for(Usuario user : usuarios) {
+				System.out.println(user.getID() + " - " + user.getUsuario());
+			}
 		} else {
 			System.out.println("ERRO: 1");
 			return null;
