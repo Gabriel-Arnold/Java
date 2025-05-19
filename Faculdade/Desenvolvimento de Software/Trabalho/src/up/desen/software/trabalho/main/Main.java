@@ -146,11 +146,14 @@ public class Main {
 				System.out.println("Digite o usuario ou digite sair para voltar:");
 				usuario = sc.next();
 				for(Usuario u : usuarios) {
-					u.Verificar(usuario);
-					if(usuario == u.getUsuario()) {
+					if(usuario.equals(u.getUsuario())) {
 						user = u;
+						usuario = "continue";
 						break;
 					}
+				}
+				if(usuario == "continue")  {
+					break;
 				}
 				System.out.println("Esse usuario não existe.");
 			}while(!usuario.equalsIgnoreCase("sair"));
@@ -160,7 +163,7 @@ public class Main {
 				do {
 					System.out.println("Digite a senha: ");
 					senha = sc.next();
-					if(user.getSenha() == senha) {
+					if(user.getSenha().equals(senha)) {
 						return user;
 					}
 					System.out.println("Senha incorreta.");
@@ -174,8 +177,9 @@ public class Main {
 			do {
 				System.out.println("Digite um nome de usuario: ");
 				usuario = sc.next();
+				sc.nextLine();
 				for(Usuario user : usuarios) {
-					if(user.getUsuario() != usuario) {
+					if(!user.getUsuario().equals(usuario)) {
 						continue;
 					} else {
 						System.out.println("Esse usuário já existe.");
@@ -185,23 +189,24 @@ public class Main {
 				break;
 			}while(!usuario.equalsIgnoreCase("sair"));
 			if(usuario != null && !usuario.equalsIgnoreCase("sair")) {
+				
 				System.out.println("Digite o seu nome completo: ");
 				String nome = null;
-				nome = sc.next();
+				nome = sc.nextLine();
+				
 				if(nome != null) {
-					
-					System.out.println(nome);
 					
 					System.out.println("Digite o seu endereço: ");
 					String endereco = null;
-					endereco = sc.next();
+					endereco = sc.nextLine();
+					
 					if(endereco != null) {
-						
-						System.out.println(endereco);
 						
 						System.out.println("Digite uma senha: ");
 						String senha = null;
-						senha =sc.next();
+						senha = sc.next();
+						sc.nextLine();
+						
 						if(senha != null) {
 							
 							System.out.println(senha);

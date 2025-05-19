@@ -55,15 +55,5 @@ public class Usuario {
 	public String getEndereco() {
 		return this.ENDERECO;
 	}
-	
-	public void Verificar(String usuario) {
-		System.out.println("Usuario digitado: '" + usuario + "'" );
-		System.out.println("Usuario para verificar: '" + this.USUARIO + "'");
-		if(usuario.trim().equals(this.USUARIO)) {
-			System.out.println("é o mesmo usuario");
-		} else {
-			System.out.println("é outro usuario");
-		}
-	}
 
 }
