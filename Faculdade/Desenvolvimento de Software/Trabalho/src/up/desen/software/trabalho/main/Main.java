@@ -98,15 +98,19 @@ public class Main {
 			switch (select) {
 			case 1: {
 				cadastrasEstabelecimento(sc);
+				continue;
 			}
 			case 2: {
 				excluirEstabelecimento(sc);
+				continue;
 			}
 			case 3: {
 				gerenciarEstabelecimento(sc);
+				continue;
 			}
 			case 4: {
 				listarEstabelecimentos();
+				continue;
 			}
 			case 5: {
 				if(Pedidos.size() > 0) {
@@ -324,6 +328,7 @@ public class Main {
 			
 			System.out.println("\nDigite a opção que deseja: ");
 			select = sc.nextInt();
+			sc.nextLine();
 			
 			switch (select) {
 			case 1: {
