@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import up.desen.software.trabalho.classes.Estabelecimento;
+import up.desen.software.trabalho.classes.Pedido;
 import up.desen.software.trabalho.classes.Produto;
 import up.desen.software.trabalho.classes.Usuario;
 
 public class Main {
 	
 	private static ArrayList<Estabelecimento> Estabelecimentos = new ArrayList<Estabelecimento>();
-	private static ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+	private static ArrayList<Pedido> Pedidos = new ArrayList<Pedido>();
+	private static ArrayList<Usuario > usuarios = new ArrayList<Usuario>();
 	
 	public static void main (String args[]) {
 		Scanner sc = new Scanner(System.in);
@@ -91,6 +93,7 @@ public class Main {
 			System.out.println("\nSelecione a opção desejada:");
 			
 			select = sc.nextInt();
+			sc.nextLine();
 			
 			switch (select) {
 			case 1: {
@@ -106,15 +109,31 @@ public class Main {
 				listarEstabelecimentos();
 			}
 			case 5: {
-				
+				if(Pedidos.size() > 0) {
+					System.out.println("ID - Cliente - Estabelecimento - Status");
+					for(Pedido pedido : Pedidos) {
+						System.out.println(pedido.getID() + " - " + pedido.getCliente().getNome() + " - " + pedido.getEstabelecimento().getNome() + " - " + pedido.getStatus());
+					}
+				} else {
+					System.out.println("Nenhum pedido feito.");
+				}
+				continue;
 			}
 			case 6: {
-				
+				if(usuarios.size() > 0) {
+					System.out.println("ID - Usuario - Nome");
+					for(Usuario user : usuarios) {
+						System.out.println(user.getID() + " - " + user.getUsuario() + user.getNome());
+					}
+				} else {
+					System.out.println("Nenhum usuario cadastrado.");
+				}
 			}
 			case 7: {
 				
 			}
 			case 0: {
+				return;
 			}
 			default:
 				System.out.println("\nOpção selecionada invalida.");;
@@ -396,7 +415,7 @@ public class Main {
 					return;
 				}
 				default:
-					throw new IllegalArgumentException("Unexpected value: " + select);
+					System.out.println("Opção selecionada inválida.");
 				}
 				
 			}while(select != 0);
