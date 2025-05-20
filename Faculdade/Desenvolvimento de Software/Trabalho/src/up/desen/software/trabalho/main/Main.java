@@ -260,7 +260,7 @@ public class Main {
 		id++;
 		
 		System.out.println("\nDigite o nome do Estabelecimento: ");
-		nome = sc.next();
+		nome = sc.nextLine();
 		
 		Estabelecimento estabelecimento = new Estabelecimento(id, nome);
 		Estabelecimentos.add(estabelecimento);
@@ -313,11 +313,12 @@ public class Main {
 			}
 			case 2: {
 				System.out.println("Digite o nome do produto");
-				String nome = sc.next();
+				String nome = sc.nextLine();
 				System.out.println("Digite o preço do produto");
 				Double preco = 0.0;
 				do {
 					preco = sc.nextDouble();
+					sc.nextLine();
 					if(preco <= 0) {
 						System.out.println("O preço deve ser maior que 0");
 					}
@@ -329,6 +330,7 @@ public class Main {
 			case 3: {
 				System.out.println("Digite o id do produto que deseja excluir:");
 				int id_produto = sc.nextInt();
+				sc.nextLine();
 				estab.removerProduto(id_produto);
 			}
 			case 4: {
@@ -349,6 +351,7 @@ public class Main {
 		do {
 			System.out.println("Digite o id do produto que quer gerenciar:");
 			id = sc.nextInt();
+			sc.nextLine();
 			if(id > 0) {
 				produto = estab.getProduto(id);
 				break;
@@ -366,11 +369,13 @@ public class Main {
 				
 				System.out.println("\nDigite a opção que deseja: ");
 				select = sc.nextInt();
+				sc.nextLine();
 				
 				switch (select) {
 				case 1: {
 					System.out.println("Digite o nome do produto: ");
 					String nome = sc.next();
+					sc.nextLine();
 					produto.setNome(nome);
 					System.out.println("Nome do produto alterado para " + nome);
 				}
@@ -379,6 +384,7 @@ public class Main {
 					Double preco = 0.0;
 					do {
 						preco = sc.nextDouble();
+						sc.nextLine();
 						if(preco <= 0) {
 							System.out.println("O preço deve ser maior que 0");
 						}
@@ -415,6 +421,7 @@ public class Main {
 	private static void excluirEstabelecimento(Scanner sc) {
 		System.out.println("Digite o id do estabelecimento que deseja excluir: ");
 		int id = sc.nextInt();
+		sc.nextLine();
 		Estabelecimento estab = null;
 		for(Estabelecimento e : Estabelecimentos) {
 			if(e.getID() == id) {
@@ -427,6 +434,7 @@ public class Main {
 			int select = -1;
 			do {
 				select = sc.nextInt();
+				sc.nextLine();
 				if(select == 1) {
 					Estabelecimentos.remove(estab);
 					System.out.println("Estabeleciomento excluido.");
