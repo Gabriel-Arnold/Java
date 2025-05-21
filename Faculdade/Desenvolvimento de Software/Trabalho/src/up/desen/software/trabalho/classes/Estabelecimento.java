@@ -11,6 +11,7 @@ public class Estabelecimento {
 	public Estabelecimento(int id, String nome) {
 		this.ID = id;
 		this.NOME = nome;
+		this.PRODUTOS = new HashMap<Integer, Produto>();
 	}
 	
 	public void setID(int id) {
@@ -23,7 +24,7 @@ public class Estabelecimento {
 	
 	public void addProduto(String nome, Double preco) {
 		int id = 0;
-		if(!PRODUTOS.isEmpty()) {
+		if(!(PRODUTOS.isEmpty())) {
 			for(int key : PRODUTOS.keySet()) {
 				if(id <= key) id = key;
 			}
@@ -79,10 +80,9 @@ public class Estabelecimento {
 	
 	public void ListarProdutos() {
 		System.out.println("\nProdutos Cadastrados:");
-		System.out.println("\n");
 		System.out.println("\nID - Produto - Valor");
 		for(int key : PRODUTOS.keySet()) {
-			System.out.println("\n" + key + " - " + PRODUTOS.get(key).getNome() + " - " + PRODUTOS.get(key).getPreco());
+			System.out.println("" + key + " - " + PRODUTOS.get(key).getNome() + " - " + PRODUTOS.get(key).getPreco());
 		}
 	}
 

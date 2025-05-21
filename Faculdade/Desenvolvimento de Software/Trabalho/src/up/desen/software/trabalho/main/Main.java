@@ -13,6 +13,7 @@ public class Main {
 	private static ArrayList<Estabelecimento> Estabelecimentos = new ArrayList<Estabelecimento>();
 	private static ArrayList<Pedido> Pedidos = new ArrayList<Pedido>();
 	private static ArrayList<Usuario > usuarios = new ArrayList<Usuario>();
+	private static Boolean Padrao = false;
 	
 	public static void main (String args[]) {
 		Scanner sc = new Scanner(System.in);
@@ -23,6 +24,7 @@ public class Main {
 			System.out.println("\n===============================");
 			System.out.println("1 - Acessar painel do cliente.");
 			System.out.println("2 - Acessar painel do administrador.");
+			System.out.println("3 - Cadastrar dados padrões.");
 			System.out.println("0 - Sair do programa.");
 			System.out.println("===============================");
 			
@@ -37,6 +39,46 @@ public class Main {
 			}
 			case 2: {
 				Painel_Admin(sc);
+				continue;
+			}
+			case 3: {
+				
+				if(Padrao == true) {
+					System.out.println("Dados padrão já estão cadastrados.");
+					return;
+				}
+				
+				// Usuario
+				
+				int id = 0;
+				for(Usuario user : usuarios) {
+					if(id <= user.getID()) id = user.getID();
+				}
+				id++;
+				Usuario user = new Usuario(id, "joao", "123", "João da Silva", "Rua porto velho, 123 W");
+				usuarios.add(user);
+				
+				// Estabelecimento
+				
+				id = 0;
+				for(Estabelecimento estab : Estabelecimentos) {
+					if(id <= estab.getID()) id = estab.getID();
+				}
+				id++;
+				Estabelecimento estabelecimento = new Estabelecimento(id, "Café do Jorge");
+				
+				// Produtos
+				
+				estabelecimento.addProduto("Pão de Queijo", 3.0);
+				estabelecimento.addProduto("Café", 4.90);
+				
+				Estabelecimentos.add(estabelecimento);
+				
+				System.out.println("Dados Padrões cadastrados.");
+				System.out.println("Cliente - Usuario: joao, Senha: 123");
+				System.out.println("Estabelecimento - Café do Jorge, Id: " + id + ".");
+				
+				Padrao = true;
 				continue;
 			}
 			case 0: {
@@ -145,6 +187,31 @@ public class Main {
 		}while(select != 0);
 	}
 	
+	private static void Fazer_Pedido(Scanner sc, Usuario user) {
+		int select = -1;
+		Estabelecimento estab = null;
+		System.out.println("Digite o id do estabelecimento ou 0 para voltar.");
+		do {
+			for(Estabelecimento e : Estabelecimentos) {
+				System.out.println(e.getID() + " - " + e.getNome());
+			}
+			select = sc.nextInt();
+			sc.nextLine();
+			for(Estabelecimento e : Estabelecimentos) {
+				if(e.getID() == select) {
+					estab = e;
+					break;
+				}
+			}
+			System.out.println("Id digitado inválido.");
+		}while(select != 0);
+		if(estab == null) {
+			System.out.println("ERRO: 1");
+			return;
+		}
+		//Continuar
+	}
+	
 	private static Usuario Login_Cadastro_Usuario(Scanner sc) {
 		int select = -1;
 		do {
@@ -169,7 +236,7 @@ public class Main {
 				System.out.println("Digite o usuario ou digite sair para voltar:");
 				usuario = sc.next();
 				for(Usuario u : usuarios) {
-					if(usuario.equals(u.getUsuario())) {
+					if(usuario.equalsIgnoreCase(u.getUsuario())) {
 						user = u;
 						usuario = "continue";
 						break;
