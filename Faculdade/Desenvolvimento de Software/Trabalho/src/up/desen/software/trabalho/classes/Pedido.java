@@ -49,5 +49,13 @@ public class Pedido {
 	public Status getStatus() {
 		return this.STATUS;
 	}
+	
+	public ArrayList<Itens> getItens() {
+		return this.ITENS;
+	}
+	
+	public void addItem(Itens item) {
+		this.ITENS.add(item);
+	}
 
 }

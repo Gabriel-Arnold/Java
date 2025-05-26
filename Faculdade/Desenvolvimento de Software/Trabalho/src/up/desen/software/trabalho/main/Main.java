@@ -1,9 +1,11 @@
 package up.desen.software.trabalho.main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import up.desen.software.trabalho.classes.Estabelecimento;
+import up.desen.software.trabalho.classes.Itens;
 import up.desen.software.trabalho.classes.Pedido;
 import up.desen.software.trabalho.classes.Produto;
 import up.desen.software.trabalho.classes.Usuario;
@@ -209,6 +211,30 @@ public class Main {
 			System.out.println("ERRO: 1");
 			return;
 		}
+		select = -1;
+		Pedido pedido = new Pedido(0, user, estab);
+		do {
+			if(!pedido.getItens().isEmpty()) {
+				System.out.println("Itens no pedido: ");
+				System.out.println("Produto - Valor unitario - Quantidade - Valor total");
+				Double total = 0.0;
+				for(Itens item : pedido.getItens()) {
+					total = total + (item.getProduto().getPreco() * item.getQuantidade());
+					System.out.println(item.getProduto().getNome() + " - " + item.getProduto().getPreco() + " - " + item.getQuantidade() + " - " + item.getProduto().getPreco() * item.getQuantidade());
+				}
+				System.out.println("Valor total do pedido: " + total);
+			}
+			System.out.println("Digite o id do item que quer adicionar ao pedido: ");
+			System.out.println("ID - Produto - Preço unitario");
+			HashMap<Integer, Produto> produtos = estab.getProdutos();
+			for(int key : produtos.keySet()) {
+				int id = key + 1;
+				System.out.println(id + " - " + produtos.get(key).getNome() + produtos.get(key).getPreco());
+			}
+			System.out.println("0 - Voltar");
+			System.out.println("1 - Continuar");
+			select = Integer.getInteger(sc.nextLine());
+		}while(select != 0 && select != 1);
 		//Continuar
 	}
 	

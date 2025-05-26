@@ -69,6 +69,10 @@ public class Estabelecimento {
 		return null;
 	}
 	
+	public HashMap<Integer, Produto> getProdutos() {
+		return this.PRODUTOS;
+	}
+	
 	
 	public int getID() {
 		return this.ID;
