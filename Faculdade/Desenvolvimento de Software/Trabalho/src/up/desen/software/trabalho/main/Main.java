@@ -234,6 +234,18 @@ public class Main {
 			System.out.println("0 - Voltar");
 			System.out.println("1 - Continuar");
 			select = Integer.getInteger(sc.nextLine());
+			
+			if(produtos.containsKey(select)) {
+				Produto produto = produtos.get(select);
+				if(produto == null) {
+					System.out.println("ERRO 1");
+					continue;
+				}
+				
+			} else {
+				System.out.println("Id digitado inválido.");
+			}
+			
 		}while(select != 0 && select != 1);
 		//Continuar
 	}
