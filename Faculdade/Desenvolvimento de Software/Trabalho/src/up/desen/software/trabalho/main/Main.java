@@ -1,5 +1,6 @@
 package up.desen.software.trabalho.main;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -9,6 +10,7 @@ import up.desen.software.trabalho.classes.Itens;
 import up.desen.software.trabalho.classes.Pedido;
 import up.desen.software.trabalho.classes.Produto;
 import up.desen.software.trabalho.classes.Usuario;
+import up.desen.software.trabalho.enums.Status;
 
 public class Main {
 	
@@ -32,6 +34,7 @@ public class Main {
 			
 			System.out.println("\nDigite a opção que deseja: ");
 			select = sc.nextInt();
+			sc.nextLine();
 			
 			switch (select) {
 			case 1: {
@@ -47,7 +50,7 @@ public class Main {
 				
 				if(Padrao == true) {
 					System.out.println("Dados padrão já estão cadastrados.");
-					return;
+					continue;
 				}
 				
 				// Usuario
@@ -57,8 +60,7 @@ public class Main {
 					if(id <= user.getID()) id = user.getID();
 				}
 				id++;
-				Usuario user = new Usuario(id, "joao", "123", "João da Silva", "Rua porto velho, 123 W");
-				usuarios.add(user);
+				usuarios.add(new Usuario(id, "joao", "123", "João da Silva", "Rua porto velho, 123 W"));
 				
 				// Estabelecimento
 				
@@ -105,15 +107,19 @@ public class Main {
 			System.out.println("\nSelecione a opção desejada:");
 			
 			select = sc.nextInt();
+			sc.nextLine();
 			
 			switch (select) {
 			case 1: {
-				
+				Fazer_Pedido(sc, user);
+				continue;
 			}
 			case 2: {
-				
+				Status_Pedido(user);
+				continue;
 			}
 			case 0: {
+				return;
 			}
 			default:
 				System.out.println("\nOpção selecionada invalida.");;
@@ -131,7 +137,7 @@ public class Main {
 			System.out.println("4 - Listar Estabelecimentos.");
 			System.out.println("5 - Listar Pedidos.");
 			System.out.println("6 - Listar Usuarios.");
-			System.out.println("7 - Concluir Entrega.");
+			System.out.println("7 - Mudar status do pedido.");
 			System.out.println("0 - Voltar.");
 			System.out.println("===============================");
 			System.out.println("\nSelecione a opção desejada:");
@@ -160,7 +166,7 @@ public class Main {
 				if(Pedidos.size() > 0) {
 					System.out.println("ID - Cliente - Estabelecimento - Status");
 					for(Pedido pedido : Pedidos) {
-						System.out.println(pedido.getID() + " - " + pedido.getCliente().getNome() + " - " + pedido.getEstabelecimento().getNome() + " - " + pedido.getStatus());
+						System.out.println(pedido.getID() + " - " + pedido.getCliente().getNome() + " - " + pedido.getEstabelecimento().getNome() + " - " + Status_Pedido(pedido));
 					}
 				} else {
 					System.out.println("Nenhum pedido feito.");
@@ -171,14 +177,65 @@ public class Main {
 				if(usuarios.size() > 0) {
 					System.out.println("ID - Usuario - Nome");
 					for(Usuario user : usuarios) {
-						System.out.println(user.getID() + " - " + user.getUsuario() + user.getNome());
+						System.out.println(user.getID() + " - " + user.getUsuario() + " - " + user.getNome());
 					}
 				} else {
 					System.out.println("Nenhum usuario cadastrado.");
 				}
+				continue;
 			}
 			case 7: {
-				
+				System.out.println("Digite o id do pedido a ser alterado ou 0 para cancelar.");
+				int id = sc.nextInt();
+				sc.nextLine();
+				if(id == 0) continue;
+				Pedido pedido = null;
+				for(Pedido p : Pedidos) {
+					if(p.getID() == id) {
+						pedido = p;
+					}
+				}
+				if(pedido == null) {
+					System.out.println("ID digitado inválido.");
+					continue;
+				} else {
+					int status = -1;
+					do {
+						System.out.println("1 - Preparando");
+						System.out.println("2 - Saiu para Entrega");
+						System.out.println("3 - Finalizado");
+						System.out.println("0 - Voltar");
+						System.out.println("\n Digite qual status quer adicionar a este pedido: ");
+						status = sc.nextInt();
+						sc.nextLine();
+						switch (status) {
+						case 0: {
+							break;
+						}
+						case 1: {
+							pedido.setStatus(Status.Preparando);
+							System.out.println("Status do pedido alterado para: Preparando.");
+							status = 0;
+							break;
+						}
+						case 2: {
+							pedido.setStatus(Status.SaiuParaEntrega);
+							System.out.println("Status do pedido alterado para: Saiu para Entrega.");
+							status = 0;
+							break;
+						}
+						case 3: {
+							pedido.setStatus(Status.Finalizado);
+							System.out.println("Status do pedido alterado para: Finalizado.");
+							status = 0;
+							break;
+						}
+						default:
+							System.out.println("Valor digitado inválido.");
+						}
+					}while(status != 0);
+				}
+				continue;
 			}
 			case 0: {
 				return;
@@ -189,14 +246,45 @@ public class Main {
 		}while(select != 0);
 	}
 	
+	private static void Status_Pedido(Usuario user) {
+		if(Pedidos.isEmpty()) {
+			System.out.println("Você não tem pedidos.");
+		} else {
+			ArrayList<Pedido> pedidos_user = new ArrayList<Pedido>();
+			for(Pedido p : Pedidos) {
+				if(p.getCliente() == user) {
+					pedidos_user.add(p);
+				}
+			}
+			if(pedidos_user.isEmpty()) {
+				System.out.println("Você não tem pedidos.");
+			} else {
+				System.out.println("Seus Pedidos: ");
+				System.out.println("----------------------------------");
+				for(Pedido p : pedidos_user) {
+					System.out.println(p.getID() + " - " + p.getEstabelecimento().getNome() + " - " + Status_Pedido(p));
+					System.out.println("Itens do pedido:");
+					System.out.println("Produto - Quantidade - Valor unitário");
+					Double total = 0.0;
+					for(Itens item : p.getItens()) {
+						System.out.println(item.getProduto().getNome() + " - " + item.getQuantidade() + " - R$ " + Formatar(item.getProduto().getPreco()));
+						total = total + (item.getProduto().getPreco() * item.getQuantidade());
+					}
+					System.out.println("Total do pedido: R$ " + Formatar(total));
+					System.out.println("----------------------------------");
+				}
+			}
+		}
+	}
+	
 	private static void Fazer_Pedido(Scanner sc, Usuario user) {
 		int select = -1;
 		Estabelecimento estab = null;
-		System.out.println("Digite o id do estabelecimento ou 0 para voltar.");
 		do {
 			for(Estabelecimento e : Estabelecimentos) {
 				System.out.println(e.getID() + " - " + e.getNome());
 			}
+			System.out.println("Digite o id do estabelecimento ou 0 para voltar: ");
 			select = sc.nextInt();
 			sc.nextLine();
 			for(Estabelecimento e : Estabelecimentos) {
@@ -205,6 +293,7 @@ public class Main {
 					break;
 				}
 			}
+			if(estab != null) break;
 			System.out.println("Id digitado inválido.");
 		}while(select != 0);
 		if(estab == null) {
@@ -215,39 +304,106 @@ public class Main {
 		Pedido pedido = new Pedido(0, user, estab);
 		do {
 			if(!pedido.getItens().isEmpty()) {
-				System.out.println("Itens no pedido: ");
-				System.out.println("Produto - Valor unitario - Quantidade - Valor total");
+				System.out.println("\nItens no pedido: ");
+				System.out.println(" Produto - Valor unitario - Quantidade - Valor total");
 				Double total = 0.0;
 				for(Itens item : pedido.getItens()) {
 					total = total + (item.getProduto().getPreco() * item.getQuantidade());
-					System.out.println(item.getProduto().getNome() + " - " + item.getProduto().getPreco() + " - " + item.getQuantidade() + " - " + item.getProduto().getPreco() * item.getQuantidade());
+					System.out.println(" " + item.getProduto().getNome() + " - R$" + Formatar(item.getProduto().getPreco()) + " - " + item.getQuantidade() + " - " + Formatar(item.getProduto().getPreco() * item.getQuantidade()));
 				}
-				System.out.println("Valor total do pedido: " + total);
+				System.out.println("Valor total do pedido: R$" + Formatar(total));
 			}
-			System.out.println("Digite o id do item que quer adicionar ao pedido: ");
-			System.out.println("ID - Produto - Preço unitario");
+			System.out.println("\nID - Produto - Preço unitario");
 			HashMap<Integer, Produto> produtos = estab.getProdutos();
 			for(int key : produtos.keySet()) {
 				int id = key + 1;
-				System.out.println(id + " - " + produtos.get(key).getNome() + produtos.get(key).getPreco());
+				System.out.println(id + " - " + produtos.get(key).getNome() + " - R$" + Formatar(produtos.get(key).getPreco()));
 			}
 			System.out.println("0 - Voltar");
 			System.out.println("1 - Continuar");
-			select = Integer.getInteger(sc.nextLine());
+			System.out.println("\nDigite o id do item que quer adicionar ao pedido: ");
+			select = sc.nextInt();
+			sc.nextLine();
 			
-			if(produtos.containsKey(select)) {
-				Produto produto = produtos.get(select);
-				if(produto == null) {
-					System.out.println("ERRO 1");
-					continue;
+			if(select > 1) {
+				int id = select;
+				id--;
+				if(produtos.containsKey(id)) {
+					Produto produto = produtos.get(id);
+					if(produto == null) {
+						System.out.println("ERRO 1");
+						continue;
+					}
+					if(!pedido.getItens().isEmpty()) {
+						boolean contains = false;
+						for(Itens item : pedido.getItens()) {
+							if(item.getProduto() == produto) {
+								contains = true;
+								item.setQuantidade(item.getQuantidade() + 1);
+							}
+						}
+						if(contains == false) {
+							pedido.addItem(new Itens(produto, 1));
+						}
+						System.out.println("Item adicionado ao pedido.");
+					} else {
+						pedido.addItem(new Itens(produto, 1));
+					}
+				} else {
+					System.out.println("Id digitado inválido.");
 				}
-				
-			} else {
-				System.out.println("Id digitado inválido.");
 			}
-			
 		}while(select != 0 && select != 1);
-		//Continuar
+		
+		select = -1;
+		
+		if(pedido.getItens().isEmpty()) {
+			System.out.println("ERRO: 1");
+			return;
+		}
+		
+		do {
+			System.out.println("\nResumo do pedido: ");
+			System.out.println(" Produto - Valor unitario - Quantidade - Valor total");
+			Double total = 0.0;
+			for(Itens item : pedido.getItens()) {
+				total = total + (item.getProduto().getPreco() * item.getQuantidade());
+				System.out.println(" - " + item.getProduto().getNome() + " - R$" + Formatar(item.getProduto().getPreco()) + " - " + item.getQuantidade() + " - R$" + Formatar(item.getProduto().getPreco() * item.getQuantidade()));
+			}
+			System.out.println("Valor total do pedido: R$" + Formatar(total));
+			
+			System.out.println("0 - Cancelar pedido");
+			System.out.println("1 - Confirmar pedido");
+			
+			select = Integer.parseInt(sc.nextLine());
+			
+			switch (select) {
+			case 0: {
+				System.out.println("Pedido cancelado.");
+				return;
+			}
+			case 1: {
+				System.out.println("Pedido realizado acompanhe o seu pedido pelo menu status do pedido.");
+				int id = 0;
+				if(Pedidos.isEmpty()) {
+					id++;
+					pedido.setID(id);
+				} else {
+					for(Pedido p : Pedidos) {
+						if(id <= p.getID()) id = p.getID();
+					}
+					id++;
+					pedido.setID(id);
+				}
+				pedido.setStatus(Status.Preparando);
+				Pedidos.add(pedido);
+				return;
+			}
+			default:
+				System.out.println("Seleção inválida.");
+				continue;
+			}
+		}while(select != 0);
 	}
 	
 	private static Usuario Login_Cadastro_Usuario(Scanner sc) {
@@ -261,6 +417,7 @@ public class Main {
 			System.out.println("===============================");
 			System.out.println("Digite a opção desejada:");
 			select = sc.nextInt();
+			sc.nextLine();
 			if(select > 0 && select <= 3) {
 				break;
 			} else {
@@ -280,7 +437,7 @@ public class Main {
 						break;
 					}
 				}
-				if(usuario == "continue")  {
+				if(usuario.equals("continue"))  {
 					break;
 				}
 				System.out.println("Esse usuario não existe.");
@@ -446,8 +603,7 @@ public class Main {
 				System.out.println("Digite o preço do produto");
 				Double preco = 0.0;
 				do {
-					preco = sc.nextDouble();
-					sc.nextLine();
+					preco = Double.parseDouble(sc.nextLine());
 					if(preco <= 0) {
 						System.out.println("O preço deve ser maior que 0");
 					}
@@ -461,9 +617,11 @@ public class Main {
 				int id_produto = sc.nextInt();
 				sc.nextLine();
 				estab.removerProduto(id_produto);
+				continue;
 			}
 			case 4: {
 				gerenciarProduto(sc, estab);
+				continue;
 			}
 			case 0: {
 				return;
@@ -507,6 +665,7 @@ public class Main {
 					sc.nextLine();
 					produto.setNome(nome);
 					System.out.println("Nome do produto alterado para " + nome);
+					continue;
 				}
 				case 2: {
 					System.out.println("Digite o preço do produto: ");
@@ -520,6 +679,7 @@ public class Main {
 					}while(preco <= 0);
 					produto.setPreco(preco);
 					System.out.println("O preço do produto foi alterado para: " + preco);
+					continue;
 				}
 				case 0: {
 					return;
@@ -576,6 +736,23 @@ public class Main {
 		} else {
 			System.out.println("Estabelecimento não encontrado.");
 		}
+	}
+	
+	private static String Status_Pedido(Pedido p) {
+		String status = "";
+		if(p.getStatus() == Status.Preparando) {
+			status = "Preparando";
+		}else if(p.getStatus() == Status.SaiuParaEntrega) {
+			status = "Saiu para Entrega";
+		}else if(p.getStatus() == Status.Finalizado) {
+			status = "Finalizado";
+		}
+		return status;
+	}
+	
+	private static String Formatar(Double d) {
+		DecimalFormat format = new DecimalFormat("##.00");
+		return format.format(d);
 	}
 
 }

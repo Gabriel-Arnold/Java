@@ -2,7 +2,7 @@ package up.desen.software.trabalho.enums;
 
 public enum Status {
 	
-	Preparo,
+	Preparando,
 	SaiuParaEntrega,
 	Finalizado,
 
