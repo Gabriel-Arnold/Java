@@ -22,4 +22,4 @@ Este projeto consiste em um aplicativo de entrega de comida desenvolvido em Java
 ## Alunos participantes
 
 - Gabriel Arnold dos Santos - RGM: 36121771
-- 
+- Pedro - RGM: 35604867
